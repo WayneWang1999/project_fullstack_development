@@ -79,9 +79,13 @@
                             </form>
                         </td>
                         <td>
-                            <form action="/owner/orders/<%= order._id %>/edit" method="get">
-                                <button type="submit" class="btn btn-sm btn-danger">edit</button>
-                            </form>
+                            <% if (order.orderStatus === 'New') { %>
+                                <form action="/owner/orders/<%= order._id %>/edit" method="post">
+                                    <button type="submit" class="btn btn-sm btn-primary">Ready</button>
+                                </form>
+                            <% } else { %>
+                                <button type="button" class="btn btn-sm btn-secondary" disabled>Ready</button>
+                            <% } %>
                         </td>
                     </tr>
                     <% }); %>
