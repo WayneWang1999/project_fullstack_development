@@ -3,9 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Restaurant Owner Login</title>
 </head>
 <body>
-    <p>This is for the Driver website</p>
+    <div class="container mt-4">
+        <div class="login-container">
+            <h1>Login</h1>
+            <form action="/owner/login" method="POST">
+                <label for="username">Username:</label>
+                <input type="text" name="email" id="username" required>
+                
+                <label for="password">Password:</label>
+                <input type="password" name="password" id="password" required>
+                
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+    <img src="../images/restaurant.jpg" alt="Girl in a jacket" width="1200" height="700">
+    
 </body>
 </html>

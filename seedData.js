@@ -60,7 +60,7 @@ const seedData = async () => {
                 description: 'Organic chicken',
                 price: 49.99,
                 inStock: true,
-                menu_images_url: ""
+                menu_images_url: "/"
             },
         ]);
 
@@ -69,8 +69,9 @@ const seedData = async () => {
             {
                 firstName: 'Wayne',
                 lastName: 'Wang',
-                email: 'wayne@example.com',
+                email: 'wayne@abc.com',
                 password: '111111',
+                phone:"6132172222",
                 address: {
                     street: '123 Main St',
                     city: 'Anytown',
@@ -82,8 +83,9 @@ const seedData = async () => {
             {
                 firstName: 'George',
                 lastName: 'Potakis',
-                email: 'george@example.com',
+                email: 'george@abc.com',
                 password: '111111',
+                phone:"6132173333",
                 address: {
                     street: '123 Main St',
                     city: 'Anytown',
@@ -95,8 +97,9 @@ const seedData = async () => {
             {
                 firstName: 'Henrique',
                 lastName: 'Machitte',
-                email: 'henrique@example.com',
+                email: 'henrique@abc.com',
                 password: '111111',
+                phone:"6132174444",
                 address: {
                     street: '123 Main St',
                     city: 'Anytown',
@@ -120,7 +123,7 @@ const seedData = async () => {
                 },
                 orderDate: new Date('2024-10-02'),
                 totalPrice: 23.3,
-                orderStatus: 'Delivered',
+                orderStatus: 'New',
                 driver: null, // Temporarily null
                 delivered_image_url: "",
             },
@@ -135,7 +138,7 @@ const seedData = async () => {
                 },
                 orderDate: new Date('2024-10-02'),
                 totalPrice: 23.3,
-                orderStatus: 'Delivered',
+                orderStatus: 'New',
                 driver: null, // Temporarily null
                 delivered_image_url: "",
             },
@@ -146,33 +149,36 @@ const seedData = async () => {
             {
                 firstName: 'Driver_01',
                 lastName: 'Machitte',
-                email: 'driver01@example.com',
+                email: 'driver01@abc.com',
                 password: '111111',
+                phone:"6132175555",
                 license: "toronto01",
                 order: orders[0]._id, // Reference to first order
             },
             {
                 firstName: 'Driver_02',
                 lastName: 'Machitte',
-                email: 'driver02@example.com',
+                email: 'driver02@abc.com',
                 password: '111111',
+                phone:"6132176666",
                 license: "toronto02",
                 order: orders[1]._id, // Reference to second order
             },
         ]);
 
         // Now update orders with driver references
-        await Order.updateOne({ _id: orders[0]._id }, { driver: drivers[0]._id });
-        await Order.updateOne({ _id: orders[1]._id }, { driver: drivers[1]._id });
+        // await Order.updateOne({ _id: orders[0]._id }, { driver: drivers[0]._id });
+        // await Order.updateOne({ _id: orders[1]._id }, { driver: drivers[1]._id });
 
         // Create owner data
         const owners = await Owner.create([
             {
                 firstName: 'Owner',
                 lastName: 'Wang',
-                email: 'owner@example.com',
+                email: 'admin@abc.com',
                 password: '111111',
                 restaurant_name: "Noodle Restaurant",
+                restaurant_menus: [menus[0]._id, menus[1]._id, menus[2]._id, menus[3]._id], // Use menu _id references
                 address: {
                     street: '123 Main St',
                     city: 'Anytown',
@@ -182,6 +188,7 @@ const seedData = async () => {
                 },
             },
         ]);
+
 
         console.log('Seed data created successfully');
     } catch (error) {

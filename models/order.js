@@ -11,7 +11,7 @@ const orderSchema = new mongoose.Schema({
     },
     orderDate: {type:Date},
     totalPrice: Number,
-    orderStatus: { type: String, enum: ['Ready for Delivery', 'In Transit', 'Delivered'], default: 'Ready for Delivery' },
+    orderStatus: { type: String, enum: ['New','Ready for Delivery', 'In Transit', 'Delivered'], default: 'New' },
     driver: { type: mongoose.Schema.Types.ObjectId, ref: 'Driver' },
     delivered_image_url:{type: String, required: false},
 }, { timestamps: true });
