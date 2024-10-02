@@ -10,6 +10,10 @@ const orderSchema = new mongoose.Schema({
         country: String
     },
     orderDate: {type:Date},
+    order_Menus:[{
+        menu: { type: mongoose.Schema.Types.ObjectId, ref: 'Menu' },
+        quantity: Number,
+    }],
     totalPrice: Number,
     orderStatus: { type: String, enum: ['New','Ready for Delivery', 'In Transit', 'Delivered'], default: 'New' },
     driver: { type: mongoose.Schema.Types.ObjectId, ref: 'Driver' },
