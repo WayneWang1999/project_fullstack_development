@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 
     if (req.session.hasOwnProperty("loggedInUser") === true) {
         // If login is successful, fetch the data
-        const orders = await Order.find().populate('customer').populate('driver');
+        const orders = await Order.find().populate('customer').populate('driver').populate('order_Menus.menu');
 
         // Render the owner's dashboard or a layout with fetched data
         return res.render('owners/layout', { orders });
@@ -59,7 +59,7 @@ router.post('/login', async (req, res) => {
 
 
         // If login is successful, fetch the data
-        const orders = await Order.find().populate('customer').populate('driver');
+        const orders = await Order.find().populate('customer').populate('driver').populate('order_Menus.menu');
 
         // Render the owner's dashboard or a layout with fetched data
         return res.render('owners/layout', { orders });
@@ -71,7 +71,7 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/orders/:id/view', async (req, res) => {
-    const order = await Order.findById(req.params.id).populate('customer').populate('driver');
+    const order = await Order.findById(req.params.id).populate('customer').populate('driver').populate('order_Menus.menu');
 
     res.render('owners/order_view.ejs', { order });
 });
@@ -90,7 +90,7 @@ router.post('/orders/:id/edit', async (req, res) => {
         const { orderStatus } = { orderStatus: "Ready for Delivery" };
         // Update the order's status in the database
         await Order.findByIdAndUpdate(orderId, { orderStatus: orderStatus });
-        const orders = await Order.find().populate('customer').populate('driver');
+        const orders = await Order.find().populate('customer').populate('driver').populate('order_Menus.menu');
         //const menus = await Menu.find();
         // Render the owner's dashboard or a layout with fetched data
         res.render('owners/layout', { orders });

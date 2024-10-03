@@ -122,10 +122,13 @@ const seedData = async () => {
                     country: 'USA',
                 },
                 orderDate: new Date('2024-10-02'),
-                order_Menus:{
+                order_Menus:[{
                     menu:menus[0]._id,
                     quantity:1,
-                },
+                },{
+                    menu:menus[1]._id,
+                    quantity:1,
+                }],
 
                 totalPrice: 23.3,
                 orderStatus: 'New',
