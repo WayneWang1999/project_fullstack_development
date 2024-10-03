@@ -24,29 +24,45 @@
             </tr>
         </thead>
         <tbody>
-            <% if (owners && owners.length > 0) { %>
-                <% owners.forEach(owner => { %>
+            <% if (owners && owners.length> 0) { %>
+                <% owners.forEach(owner=> { %>
                     <tr>
-                        <td><%= owner.firstName %> <%= owner.lastName %></td>
-                        <td><%= owner.email %></td>
-                        <td><%= owner.password %></td>
-                        <td><%= owner.restaurant_name %></td>
+                        <td>
+                            <%= owner.firstName %>
+                                <%= owner.lastName %>
+                        </td>
+                        <td>
+                            <%= owner.email %>
+                        </td>
+                        <td>
+                            <%= owner.password %>
+                        </td>
+                        <td>
+                            <%= owner.restaurant_name %>
+                        </td>
+                        <td>
+                            <form action="/owner/info/edit" method="get">
+                                <button type="submit" class="btn btn-sm btn-danger">edit</button>
+                            </form>
+                        </td>
                     </tr>
-                <% }); %>
-            <% } else { %>
-                <tr>
-                    <td colspan="4">No Owners found</td>
-                </tr>
-            <% } %>
+                    <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="4">No Owners found</td>
+                            </tr>
+                            <% } %>
         </tbody>
     </table>
 
     <!-- Separate Table for Menus -->
-   
-    <% if (owners && owners.length > 0) { %>
-        <% owners.forEach(owner => { %>
-            <h2><%= owner.restaurant_name %> Menus</h2>
-            
+
+    <% if (owners && owners.length> 0) { %>
+        <% owners.forEach(owner=> { %>
+            <h2>
+                <%= owner.restaurant_name %> Menus
+            </h2>
+
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -59,39 +75,42 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% if (owner.restaurant_menus && owner.restaurant_menus.length > 0) { %>
-                        <% owner.restaurant_menus.forEach(menu => { %>
+                    <% if (owner.restaurant_menus && owner.restaurant_menus.length> 0) { %>
+                        <% owner.restaurant_menus.forEach(menu=> { %>
                             <tr>
-                                <td><%= menu.name %></td>
-                                <td><%= menu.description %></td>
-                                <td>$<%= menu.price %></td>
-                                <td><%= menu.sku %></td>
-                                <td><%= menu.inStock %></td>
-                                <td>$<%= menu.images %></td>
                                 <td>
-                                    <form action="/owners/<%= menu._id %>/edit" method="get">
+                                    <%= menu.name %>
+                                </td>
+                                <td>
+                                    <%= menu.description %>
+                                </td>
+                                <td>$<%= menu.price %>
+                                </td>
+                                <td>
+                                    <%= menu.sku %>
+                                </td>
+                                <td>
+                                    <%= menu.inStock %>
+                                </td>
+                                <td>$<%= menu.images %>
+                                </td>
+                                <td>
+                                    <form action="/owner/menu/<%= menu._id %>/edit" method="get">
                                         <button type="submit" class="btn btn-sm btn-danger">edit</button>
                                     </form>
                                 </td>
-                                <td>
-                                    <form action="/owners/<%= menu._id %>/delete" method="post">
-                                        <button type="submit" class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Are you sure?')">delete</button>
-                                    </form>
-        
-                                </td>
                             </tr>
                             </tr>
-                        <% }); %>
-                    <% } else { %>
-                        <tr>
-                            <td colspan="3">No menus available</td>
-                        </tr>
-                    <% } %>
+                            <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="3">No menus available</td>
+                                    </tr>
+                                    <% } %>
                 </tbody>
             </table>
-        <% }); %>
-    <% } %>
+            <% }); %>
+                <% } %>
 </body>
 
 </html>

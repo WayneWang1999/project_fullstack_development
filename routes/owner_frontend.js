@@ -18,16 +18,16 @@ router.get('/', async (req, res) => {
 
         // Render the owner's dashboard or a layout with fetched data
         return res.render('owners/layout', { orders });
-        
+
     }
     res.render('owners/login');
 });
 
 router.get('/logout', async (req, res) => {
-  
+
     req.session.destroy()
-   console.log("LOGGED OUT!!! Redirecting you back to the / endpoint")
-   return res.redirect("/owner")
+    console.log("LOGGED OUT!!! Redirecting you back to the / endpoint")
+    return res.redirect("/owner")
 
 });
 
@@ -36,11 +36,11 @@ router.get('/logout', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     console.log("Login attempt received");
-    
+
 
     const { email, password } = req.body;
 
-    try {    
+    try {
 
         // Check if a user with the provided email exists
         const owner = await Owner.findOne({ email: { $regex: new RegExp('^' + email + '$', 'i') } });
@@ -101,9 +101,65 @@ router.post('/orders/:id/edit', async (req, res) => {
     }
 });
 
-router.get('/new', async (req, res) => {
+router.get('/menu', async (req, res) => {
     const owners = await Owner.find().populate('restaurant_menus');
     res.render('owners/owner_view', { owners });
 });
+router.get('/info/edit', async (req, res) => {
+    const owners = await Owner.find().populate('restaurant_menus');
+    res.render('owners/owner_edit', { owners });
+});
+
+router.post('/info/update', async (req, res) => {
+    const { ownerId, firstName, lastName, email, password, restaurant_name } = req.body;
+
+    // Update the owner in the database
+    await Owner.findByIdAndUpdate(ownerId, {
+        firstName,
+        lastName,
+        email,
+        password, // Make sure to hash the password if necessary
+        restaurant_name
+    });
+
+    // Redirect or respond after updating
+    res.redirect('/owner/menu'); // Change this to where you want to redirect
+});
+
+router.get('/menu/:id/edit', async (req, res) => {
+    try {
+        console.log(req.params.id)
+        const menu = await Menu.findById(req.params.id);
+        if (!menu) {
+            return res.status(404).send('Menu not found');
+        }
+        res.render('owners/menu_edit', { menu }); // Change 'menus' to 'menu'
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+});
+
+router.post('/menu/update', async (req, res) => {
+    const { menuId, name, description, price, inStock, menu_images_url } = req.body;
+
+    try {
+        // Update the menu item in the database
+        await Menu.findByIdAndUpdate(menuId, {
+            name,
+            description,
+            price,
+            inStock, // Ensure the correct value type for inStock (boolean)
+            menu_images_url
+        });
+
+        // Redirect after successfully updating
+        res.redirect('/owner/menu'); // Redirect to the desired page after update
+    } catch (error) {
+        console.error('Error updating menu:', error);
+        res.status(500).send('An error occurred while updating the menu.');
+    }
+});
+
 module.exports = router;
 
