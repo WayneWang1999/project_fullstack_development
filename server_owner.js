@@ -1,4 +1,4 @@
-//This is the owner website designed by :
+//This is the owner website designed by Wayne:
 const express = require('express');
 const mongoose = require('mongoose');
 const path=require('path');
@@ -12,13 +12,13 @@ const Driver = require('./models/driver');
 const Menu = require('./models/menu');
 const Order = require('./models/order');
 const owner = require('./models/owner');
-//import all the routers
+//define the server
 const app = express();
 // Middleware
 app.use(express.json());
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
-// setup sessions
+// setup sessions for login
 const session = require('express-session')
 app.use(session({
    secret: "the quick brown fox jumped over the lazy dog 1234567890",  // random string, used for configuring the session
@@ -35,6 +35,7 @@ mongoose.connect(process.env.MONGO_URI)
 app.set('view engine', 'ejs');
 // Set the views directory
 app.set('views', path.join(__dirname, 'views'));
+//for the form submit
 app.use(express.urlencoded({ extended: true }));
 
 //************************************************************************************************************************** */

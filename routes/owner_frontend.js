@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
         return res.render('owners/layout', { orders });
 
     }
-    res.render('owners/login');
+    return res.render('owners/login');
 });
 
 router.get('/logout', async (req, res) => {
@@ -35,9 +35,7 @@ router.get('/logout', async (req, res) => {
 //const bcrypt = require('bcrypt'); // Make sure bcrypt is required
 
 router.post('/login', async (req, res) => {
-    console.log("Login attempt received");
-
-
+    
     const { email, password } = req.body;
 
     try {
@@ -61,7 +59,7 @@ router.post('/login', async (req, res) => {
         // If login is successful, fetch the data
         const orders = await Order.find().populate('customer').populate('driver').populate('order_Menus.menu');
 
-        // Render the owner's dashboard or a layout with fetched data
+        // Render the owner's dashboard to a layout with fetched data
         return res.render('owners/layout', { orders });
 
     } catch (err) {
@@ -75,19 +73,17 @@ router.get('/orders/:id/view', async (req, res) => {
 
     res.render('owners/order_view.ejs', { order });
 });
-// router.get('/orders/:id/edit', async (req, res) => {
-//     const order = await Order.findById(req.params.id).populate('customer').populate('driver');
+router.get('/orders/:id/edit', async (req, res) => {
+    const order = await Order.findById(req.params.id).populate('customer').populate('driver');
 
-//     res.render('owners/order_edit.ejs',{order});
-// });
+    res.render('owners/order_edit.ejs',{order});
+});
 
-router.post('/orders/:id/edit', async (req, res) => {
-    try {
-
-        console.log(req.params.id)
+router.post('/orders/:id/update', async (req, res) => {
+    try {     
         const orderId = req.params.id;
-        //const {orderStatus } = req.body; // Get orderId and new orderStatus from the form
-        const { orderStatus } = { orderStatus: "Ready for Delivery" };
+        const { orderStatus } = req.body; // Get orderId and new orderStatus from the form
+        
         // Update the order's status in the database
         await Order.findByIdAndUpdate(orderId, { orderStatus: orderStatus });
         const orders = await Order.find().populate('customer').populate('driver').populate('order_Menus.menu');
@@ -128,7 +124,7 @@ router.post('/info/update', async (req, res) => {
 
 router.get('/menu/:id/edit', async (req, res) => {
     try {
-        console.log(req.params.id)
+        
         const menu = await Menu.findById(req.params.id);
         if (!menu) {
             return res.status(404).send('Menu not found');

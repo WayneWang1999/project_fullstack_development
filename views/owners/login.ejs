@@ -1,26 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Restaurant Owner Login</title>
+    <style>
+        /* General resets */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #007bff;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Add some space at the bottom of the form */
+        .login-container {
+            margin-bottom: 20px;
+        }
+
+        /* Image styling */
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 90%;
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            button {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            button {
+                font-size: 12px;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <div class="container mt-4">
+    <div class="container">
         <div class="login-container">
-            <h1>Login</h1>
+            <h1>Restaurant Owner Login</h1>
             <form action="/owner/login" method="POST">
                 <label for="username">Username:</label>
                 <input type="text" name="email" id="username" required>
-                
+
                 <label for="password">Password:</label>
                 <input type="password" name="password" id="password" required>
-                
+
                 <button type="submit">Login</button>
             </form>
         </div>
+        <img src="../images/restaurant.jpg" alt="Restaurant Image" width="1200" height="700">
     </div>
-    <img src="../images/restaurant.jpg" alt="Girl in a jacket" width="1200" height="700">
-    
 </body>
+
 </html>
