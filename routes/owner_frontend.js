@@ -1,6 +1,7 @@
 //This route is render a html to the views ejs .
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcrypt');
 
 //Import the models
 const Customer = require('../models/customer');
@@ -52,9 +53,9 @@ router.post('/login', async (req, res) => {
             // Return error if no user with the given email
             return res.status(400).render('owners/login', { error: 'Invalid email' });
         }
-
+        const isMatch = await bcrypt.compare(password, owner.password);
         // Compare the provided password with the stored hashed password
-        if (password !== owner.password) {  // Fixed from user.password to owner.password
+        if (!isMatch) {  // Fixed from user.password to owner.password
             return res.status(400).render('owners/login', { error: 'Invalid email or password' });
         }
         //add userSession if need to use .
@@ -118,13 +119,16 @@ router.get('/info/edit', async (req, res) => {
 
 router.post('/info/update', async (req, res) => {
     const { ownerId, firstName, lastName, email, password, restaurant_name } = req.body;
+        // Hash the new password
+        const saltRounds = 5;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     // Update the owner in the database
     await Owner.findByIdAndUpdate(ownerId, {
         firstName,
         lastName,
         email,
-        password, // Make sure to hash the password if necessary
+        password:hashedPassword, // Make sure to hash the password if necessary
         restaurant_name
     });
 

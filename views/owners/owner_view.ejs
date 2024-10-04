@@ -125,7 +125,6 @@ button.btn-danger:hover {
             <tr>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Password</th>
                 <th>Restaurant Name</th>
                 <th>Edit</th>
             </tr>
@@ -136,7 +135,6 @@ button.btn-danger:hover {
                     <tr>
                         <td><%= owner.firstName %> <%= owner.lastName %></td>
                         <td><%= owner.email %></td>
-                        <td><%= owner.password %></td>
                         <td><%= owner.restaurant_name %></td>
                         <td>
                             <form action="/owner/info/edit" method="get">

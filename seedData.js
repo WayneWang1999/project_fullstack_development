@@ -6,6 +6,7 @@ require('dotenv').config();
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
+const bcrypt = require('bcrypt');
 
 // Set storage engine for multer
 const storage = multer.diskStorage({
@@ -246,12 +247,15 @@ const seedData = async () => {
         // await Order.updateOne({ _id: orders[1]._id }, { driver: drivers[1]._id });
 
         // Create owner data
+        const saltRounds = 5;
+        const hashedPassword = await bcrypt.hash('111111', saltRounds);
+
         const owners = await Owner.create([
             {
                 firstName: 'Owner',
                 lastName: 'Wang',
                 email: 'admin@abc.com',
-                password: '111111',
+                password: hashedPassword,
                 restaurant_name: "Noodle Restaurant",
                 restaurant_menus: [menus[0]._id, menus[1]._id, menus[2]._id, menus[3]._id], // Use menu _id references
                 address: {
