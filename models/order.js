@@ -17,7 +17,7 @@ const orderSchema = new mongoose.Schema({
     totalPrice: Number,
     orderStatus: { type: String, enum: ['New','Ready for Delivery', 'In Transit', 'Delivered'], default: 'New' },
     driver: { type: mongoose.Schema.Types.ObjectId, ref: 'Driver' },
-    delivered_image_url:{type: String, required: false},
+    delivered_image_url:{type: mongoose.Schema.Types.ObjectId, ref: 'Image'},
 }, { timestamps: true });
 
 module.exports = mongoose.model('Order', orderSchema);

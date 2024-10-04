@@ -6,7 +6,7 @@ const menuSchema = new mongoose.Schema({
   description: String,
   price: { type: Number, required: true },
   inStock: { type: Boolean, default: true },
-  menu_images_url: {type: String, required: false},
+  menu_images_url: {type: mongoose.Schema.Types.ObjectId, ref: 'Image'},
 }, { timestamps: true });
 
 module.exports = mongoose.model('Menu', menuSchema);
