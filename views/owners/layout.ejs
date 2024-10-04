@@ -155,7 +155,7 @@
                 <th>Order Status</th>
                 <th>Driver Name</th>
                 <th>Driver License</th>
-                <th>Delivery Image</th>
+                <th>Delivered Image</th>
                 <th>View</th>
                 <th>Action</th>
             </tr>
@@ -191,10 +191,10 @@
                             <%= order.orderStatus %>
                         </td>
                         <td>
-                            <%= order.driver?.firstName || 'null' %>
+                            <%= order.driver?.firstName || 'Good Deal...' %>
                         </td>
                         <td>
-                            <%= order.driver?.license || 'null' %>
+                            <%= order.driver?.license || 'Good Deal...' %>
                         </td>
                         <td>
                             <%= order.delivered_image_url %>

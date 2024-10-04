@@ -7,99 +7,117 @@
     <title>Owner Management</title>
     <style>
         /* General reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* General reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-        }
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+    position: relative; /* Add this to position the button */
+}
 
-        h1, h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333;
-        }
+h1, h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
 
-        /* Table Styling */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 40px;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
-        }
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
 
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
 
-        th {
-            background-color: #007bff;
-            color: white;
-            text-transform: uppercase;
-        }
+th {
+    background-color: #007bff;
+    color: white;
+    text-transform: uppercase;
+}
 
-        tr:hover {
-            background-color: #f1f1f1;
-        }
+tr:hover {
+    background-color: #f1f1f1;
+}
 
-        td {
-            color: #555;
-        }
+td {
+    color: #555;
+}
 
-        /* Button Styling */
-        button {
-            padding: 8px 12px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s ease;
-        }
+/* Button Styling */
+button {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
 
-        button:hover {
-            background-color: #0056b3;
-        }
+button:hover {
+    background-color: #0056b3;
+}
 
-        button.btn-danger {
-            background-color: #dc3545;
-        }
+button.btn-danger {
+    background-color: #dc3545;
+}
 
-        button.btn-danger:hover {
-            background-color: #c82333;
-        }
+button.btn-danger:hover {
+    background-color: #c82333;
+}
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
+/* Back Button Styling */
+.back-btn {
+    position: absolute; /* Position it absolutely */
+    top: 20px; /* Distance from the top */
+    right: 20px; /* Distance from the right */
+    text-decoration: none; /* Remove underline */
+    font-size: xx-large;
+}
 
-            table {
-                font-size: 14px;
-            }
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
 
-            button {
-                font-size: 12px;
-                padding: 6px 10px;
-            }
-        }
+    table {
+        font-size: 14px;
+    }
+
+    button {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+
+    .back-btn {
+        top: 10px; /* Adjust if necessary for mobile view */
+        right: 10px; /* Adjust if necessary for mobile view */
+    }
+}
+
     </style>
 </head>
 
 <body>
     <h1>Owners</h1>
+    <a href="/owner" class="back-btn">Back</a> <!-- Updated the class here -->
 
     <!-- Main Table for Owners -->
     <table>
@@ -146,7 +164,7 @@
                         <th>Description</th>
                         <th>Price</th>
                         <th>Menu SKU</th>
-                        <th>Instock</th>
+                        <th>In stock</th>
                         <th>Image</th>
                         <th>Edit</th>
                     </tr>
@@ -185,7 +203,6 @@
             </table>
         <% }); %>
     <% } %>
-
 </body>
 
 </html>
