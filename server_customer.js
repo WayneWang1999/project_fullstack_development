@@ -37,7 +37,7 @@ app.use(express.urlencoded({ extended: true }));
 //mount the router only edit this code.
 const customerRouters = require('./routes/customer_frontend');
 app.use('/customer', customerRouters);
-// comment abcde add by WangWayne
+
 //****************************************************************************************************** */
 
 app.listen(PORT, () => {
