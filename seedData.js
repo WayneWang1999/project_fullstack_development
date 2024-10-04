@@ -46,23 +46,50 @@ const seedData = async () => {
         await Owner.deleteMany();
         await Image.deleteMany();
         //create image data
-        const imgPath = path.join(__dirname, '\\public\\images\\restaurant.jpg');
-        const imgData = fs.readFileSync(imgPath);
+        const imgPath1 = path.join(__dirname, '\\public\\images\\fish.jpeg');
+        const imgData1 = fs.readFileSync(imgPath1);
+        const imgPath2 = path.join(__dirname, '\\public\\images\\bread.jpeg');
+        const imgData2 = fs.readFileSync(imgPath2);
+        const imgPath3 = path.join(__dirname, '\\public\\images\\beef.jpeg');
+        const imgData3 = fs.readFileSync(imgPath3);
+        const imgPath4 = path.join(__dirname, '\\public\\images\\chicken.jpeg');
+        const imgData4 = fs.readFileSync(imgPath4);
         const images = await Image.create({
-            name: 'Sample Image',
+            name: 'fish',
             desc: 'A sample image description',
             img: {
-                data: imgData,
+                data: imgData1,
                 contentType: 'image/jpeg'  // Change content type based on your image
             }
-        }, {
-            name: 'Sample Image',
+        },
+         {
+            name: 'bread',
             desc: 'A sample image description',
             img: {
-                data: imgData,
+                data: imgData2,
                 contentType: 'image/jpeg'  // Change content type based on your image
             }
-        });
+        },
+        {
+            name: 'beef',
+            desc: 'A sample image description',
+            img: {
+                data: imgData3,
+                contentType: 'image/jpeg'  // Change content type based on your image
+            }
+        },
+        {
+            name: 'chicken',
+            desc: 'A sample image description',
+            img: {
+                data: imgData4,
+                contentType: 'image/jpeg'  // Change content type based on your image
+            }
+        }
+    
+    
+    );
+        
 
         // Create menu data
         const menus = await Menu.create([
@@ -80,7 +107,7 @@ const seedData = async () => {
                 description: 'Freshly baked bread',
                 price: 5.99,
                 inStock: true,
-                menu_images_url: images[0]._id
+                menu_images_url: images[1]._id
             },
             {
                 name: 'Beef',
@@ -88,7 +115,7 @@ const seedData = async () => {
                 description: 'High-quality beef',
                 price: 99.99,
                 inStock: true,
-                menu_images_url: images[0]._id
+                menu_images_url: images[2]._id
             },
             {
                 name: 'Chicken',
@@ -96,7 +123,7 @@ const seedData = async () => {
                 description: 'Organic chicken',
                 price: 49.99,
                 inStock: true,
-                menu_images_url: images[0]._id
+                menu_images_url: images[3]._id
             },
         ]);
 
