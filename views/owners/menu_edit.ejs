@@ -84,7 +84,7 @@
         <h1>Edit Menu Item</h1>
 
         <!-- Main Form for Editing Menu -->
-        <form action="/owner/menu/update" method="post">
+        <form action="/owner/menu/update" method="post" enctype="multipart/form-data">
             <table>
                 <thead>
                     <tr>
@@ -130,13 +130,20 @@
 
                             <!-- Editable Menu Image URL -->
                             <td>
-                                <% if (menu.menu_images_url && menu.menu_images_url.img) { %>
-                                    <img src="data:<%= menu.menu_images_url.img.contentType %>;base64,<%= menu.menu_images_url.img.data.toString('base64') %>" 
-                                         alt="<%= menu.menu_images_url.name %>" 
-                                         style="width: 100px; height: auto;" />
-                                <% } else { %>
-                                    <p>No image available</p>
-                                <% } %>
+                                <!-- Image preview or default "No image available" -->
+                                <label for="menuImageUpload">
+                                    <% if (menu.menu_images_url && menu.menu_images_url.img) { %>
+                                        <img id="menuImagePreview" 
+                                             src="data:<%= menu.menu_images_url.img.contentType %>;base64,<%= menu.menu_images_url.img.data.toString('base64') %>" 
+                                             alt="<%= menu.menu_images_url.name %>" 
+                                             style="width: 100px; height: auto; cursor: pointer;" />
+                                    <% } else { %>
+                                        <p id="noImageAvailable" style="cursor: pointer;">Click to upload an image</p>
+                                    <% } %>
+                                </label>
+                            
+                                <!-- Hidden file input field for image upload -->
+                                <input type="file" id="menuImageUpload" name="menuImage" accept="image/*" style="display: none;" onchange="previewImage(event)">
                             </td>
                             
 
@@ -158,5 +165,40 @@
         </form>
     </div>
 </body>
+
+
+<script>
+    // Function to preview image after selecting a file
+    function previewImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Display the uploaded image in the preview area
+                const imgElement = document.getElementById('menuImagePreview');
+                if (imgElement) {
+                    imgElement.src = e.target.result;
+                } else {
+                    const noImageText = document.getElementById('noImageAvailable');
+                    noImageText.style.display = 'none';
+                    const imgPreview = document.createElement('img');
+                    imgPreview.id = 'menuImagePreview';
+                    imgPreview.src = e.target.result;
+                    imgPreview.style = "width: 100px; height: auto; cursor: pointer;";
+                    noImageText.parentNode.appendChild(imgPreview);
+                }
+            };
+            reader.readAsDataURL(file); // Convert image to base64 URL
+        }
+    }
+
+    // Make the image clickable to trigger the file input
+    document.getElementById('menuImagePreview')?.addEventListener('click', function() {
+        document.getElementById('menuImageUpload').click();
+    });
+    document.getElementById('noImageAvailable')?.addEventListener('click', function() {
+        document.getElementById('menuImageUpload').click();
+    });
+</script>
 
 </html>
