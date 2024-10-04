@@ -130,8 +130,15 @@
 
                             <!-- Editable Menu Image URL -->
                             <td>
-                                <input type="text" name="menu_images_url" value="<%= menu.menu_images_url %>">
+                                <% if (menu.menu_images_url && menu.menu_images_url.img) { %>
+                                    <img src="data:<%= menu.menu_images_url.img.contentType %>;base64,<%= menu.menu_images_url.img.data.toString('base64') %>" 
+                                         alt="<%= menu.menu_images_url.name %>" 
+                                         style="width: 100px; height: auto;" />
+                                <% } else { %>
+                                    <p>No image available</p>
+                                <% } %>
                             </td>
+                            
 
                             <!-- Hidden field to hold the menu item's ID -->
                             <input type="hidden" name="menuId" value="<%= menu._id %>">

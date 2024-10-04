@@ -125,7 +125,7 @@ router.post('/info/update', async (req, res) => {
 router.get('/menu/:id/edit', async (req, res) => {
     try {
         
-        const menu = await Menu.findById(req.params.id);
+        const menu = await Menu.findById(req.params.id).populate('menu_images_url');
         if (!menu) {
             return res.status(404).send('Menu not found');
         }

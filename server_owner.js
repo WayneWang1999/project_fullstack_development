@@ -12,6 +12,7 @@ const Driver = require('./models/driver');
 const Menu = require('./models/menu');
 const Order = require('./models/order');
 const owner = require('./models/owner');
+const Image=require('./models/image')
 //define the server
 const app = express();
 // Middleware
