@@ -3,6 +3,22 @@
 
 const mongoose = require('mongoose');
 require('dotenv').config();
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+
+// Set storage engine for multer
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/'); // Directory where files will be saved temporarily
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
+// Initialize upload
+const upload = multer({ storage: storage });
 
 // Import models this begin Captial word is the db collection object.
 const Customer = require('./models/customer');
@@ -10,6 +26,7 @@ const Driver = require('./models/driver');
 const Menu = require('./models/menu');
 const Order = require('./models/order');
 const Owner = require('./models/owner');
+const Image = require('./models/image')
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
@@ -27,6 +44,25 @@ const seedData = async () => {
         await Menu.deleteMany();
         await Order.deleteMany();
         await Owner.deleteMany();
+        await Image.deleteMany();
+        //create image data
+        const imgPath = path.join(__dirname, '\\public\\images\\restaurant.jpg');
+        const imgData = fs.readFileSync(imgPath);
+        const images = await Image.create({
+            name: 'Sample Image',
+            desc: 'A sample image description',
+            img: {
+                data: imgData,
+                contentType: 'image/jpeg'  // Change content type based on your image
+            }
+        }, {
+            name: 'Sample Image',
+            desc: 'A sample image description',
+            img: {
+                data: imgData,
+                contentType: 'image/jpeg'  // Change content type based on your image
+            }
+        });
 
         // Create menu data
         const menus = await Menu.create([
@@ -36,7 +72,7 @@ const seedData = async () => {
                 description: 'Freshly caught fish',
                 price: 79.99,
                 inStock: true,
-                menu_images_url: ""
+                menu_images_url: images[0]._id
             },
             {
                 name: 'Bread',
@@ -44,7 +80,7 @@ const seedData = async () => {
                 description: 'Freshly baked bread',
                 price: 5.99,
                 inStock: true,
-                menu_images_url: ""
+                menu_images_url: images[0]._id
             },
             {
                 name: 'Beef',
@@ -52,7 +88,7 @@ const seedData = async () => {
                 description: 'High-quality beef',
                 price: 99.99,
                 inStock: true,
-                menu_images_url: ""
+                menu_images_url: images[0]._id
             },
             {
                 name: 'Chicken',
@@ -60,7 +96,7 @@ const seedData = async () => {
                 description: 'Organic chicken',
                 price: 49.99,
                 inStock: true,
-                menu_images_url: "/"
+                menu_images_url: images[0]._id
             },
         ]);
 
@@ -71,7 +107,7 @@ const seedData = async () => {
                 lastName: 'Wang',
                 email: 'wayne@abc.com',
                 password: '111111',
-                phone:"6132172222",
+                phone: "6132172222",
                 address: {
                     street: '123 Main St',
                     city: 'Anytown',
@@ -85,7 +121,7 @@ const seedData = async () => {
                 lastName: 'Potakis',
                 email: 'george@abc.com',
                 password: '111111',
-                phone:"6132173333",
+                phone: "6132173333",
                 address: {
                     street: '123 Main St',
                     city: 'Anytown',
@@ -99,7 +135,7 @@ const seedData = async () => {
                 lastName: 'Machitte',
                 email: 'henrique@abc.com',
                 password: '111111',
-                phone:"6132174444",
+                phone: "6132174444",
                 address: {
                     street: '123 Main St',
                     city: 'Anytown',
@@ -122,18 +158,18 @@ const seedData = async () => {
                     country: 'USA',
                 },
                 orderDate: new Date('2024-10-02'),
-                order_Menus:[{
-                    menu:menus[0]._id,
-                    quantity:1,
-                },{
-                    menu:menus[1]._id,
-                    quantity:1,
+                order_Menus: [{
+                    menu: menus[0]._id,
+                    quantity: 1,
+                }, {
+                    menu: menus[1]._id,
+                    quantity: 1,
                 }],
 
                 totalPrice: 23.3,
                 orderStatus: 'New',
                 driver: null, // Temporarily null
-                delivered_image_url: "",
+                delivered_image_url: images[0]._id,
             },
             {
                 customer: customers[1]._id,  // Reference to the second customer
@@ -145,14 +181,14 @@ const seedData = async () => {
                     country: 'USA',
                 },
                 orderDate: new Date('2024-10-02'),
-                order_Menus:{
-                    menu:menus[0]._id,
-                    quantity:1,
+                order_Menus: {
+                    menu: menus[0]._id,
+                    quantity: 1,
                 },
                 totalPrice: 23.3,
                 orderStatus: 'New',
                 driver: null, // Temporarily null
-                delivered_image_url: "",
+                delivered_image_url: images[0]._id,
             },
         ]);
 
@@ -163,7 +199,7 @@ const seedData = async () => {
                 lastName: 'Machitte',
                 email: 'driver01@abc.com',
                 password: '111111',
-                phone:"6132175555",
+                phone: "6132175555",
                 license: "toronto01",
                 order: orders[0]._id, // Reference to first order
             },
@@ -172,7 +208,7 @@ const seedData = async () => {
                 lastName: 'Machitte',
                 email: 'driver02@abc.com',
                 password: '111111',
-                phone:"6132176666",
+                phone: "6132176666",
                 license: "toronto02",
                 order: orders[1]._id, // Reference to second order
             },
