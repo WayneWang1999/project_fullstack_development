@@ -59,6 +59,7 @@ router.post('/login', async (req, res) => {
         // If login is successful, fetch the data
         const orders = await Order.find().populate('customer').populate('driver').populate('order_Menus.menu');
 
+        
         // Render the owner's dashboard to a layout with fetched data
         return res.render('owners/layout', { orders });
 
@@ -98,7 +99,10 @@ router.post('/orders/:id/update', async (req, res) => {
 });
 
 router.get('/menu', async (req, res) => {
-    const owners = await Owner.find().populate('restaurant_menus');
+    const owners = await Owner.find().populate({
+        path: 'restaurant_menus',
+        populate: { path: 'menu_images_url' }
+      });;
     res.render('owners/owner_view', { owners });
 });
 router.get('/info/edit', async (req, res) => {
