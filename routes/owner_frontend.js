@@ -39,7 +39,6 @@ router.get('/logout', async (req, res) => {
 });
 
 //user login check function
-//const bcrypt = require('bcrypt'); // Make sure bcrypt is required
 
 router.post('/login', async (req, res) => {
 
@@ -80,6 +79,8 @@ router.get('/orders/:id/view', async (req, res) => {
 
     res.render('owners/order_view.ejs', { order });
 });
+
+//This is for debug function. In the sumbit project don't use this point.
 router.get('/orders/:id/edit', async (req, res) => {
     const order = await Order.findById(req.params.id).populate('customer').populate('driver');
 
@@ -160,12 +161,6 @@ router.post('/info/update', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
-
-
-
-
-
-
 
 router.get('/menu/:id/edit', async (req, res) => {
     try {
