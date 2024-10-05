@@ -29,6 +29,7 @@
             background-color: #fff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
+            text-align: center;
         }
 
         h1 {
@@ -92,6 +93,27 @@
             border-radius: 8px;
         }
 
+        /* Style for address and open hours */
+        .restaurant-info {
+            margin-top: 20px;
+            color: #666;
+            font-size: 16px;
+            text-align: left;
+        }
+
+        .restaurant-info div {
+            margin-bottom: 5px;
+        }
+
+        /* Highlight address and open hours */
+        .restaurant-info .address {
+            font-weight: bold;
+        }
+
+        .restaurant-info .open-hours {
+            color: #007bff;
+        }
+
         /* Responsive design */
         @media (max-width: 768px) {
             .container {
@@ -123,7 +145,7 @@
 <body>
     <div class="container">
         <div class="login-container">
-            <h1>Restaurant Owner Login</h1>
+            <h1>Restaurant Owner</h1>
             <form action="/owner/login" method="POST">
                 <label for="username">Username:</label>
                 <input type="text" name="email" id="username" required>
@@ -135,7 +157,12 @@
             </form>
         </div>
         <img src="../images/restaurant_ping.jpeg" alt="Restaurant Image" width="1200" height="700">
+        <div class="restaurant-info">
+            <div class="address">354 Queen St W, Toronto, ON M5V 2A2</div>
+            <div class="open-hours">Open Hours: 12pm - 10pm</div>
+        </div>
     </div>
+
 </body>
 
 </html>

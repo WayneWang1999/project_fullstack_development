@@ -116,7 +116,9 @@ button.btn-danger:hover {
 </head>
 
 <body>
-    <h1>Owners</h1>
+    <% owners.forEach(owner => { %>
+    <h1><%= owner.restaurant_name %></h1>
+    <%})%>
     <a href="/owner" class="back-btn">Back</a> <!-- Updated the class here -->
 
     <!-- Main Table for Owners -->
