@@ -191,10 +191,10 @@
                             <%= order.orderStatus %>
                         </td>
                         <td>
-                            <%= order.driver?.firstName || 'Good Deal...' %>
+                            <%= order.driver?.firstName || 'Waiting driver...' %>
                         </td>
                         <td>
-                            <%= order.driver?.license || 'Good Deal...' %>
+                            <%= order.driver?.license || 'Driver license...' %>
                         </td>
                         <td>
                             <%= order.delivered_image_url %>
@@ -209,7 +209,7 @@
                             <% if (order.orderStatus==='New' ) { %>
                                 <form action="/owner/orders/<%= order._id %>/update" method="post">
                                     <input type="hidden" name="orderStatus" value="Ready for Delivery">
-                                    <button type="submit" class="btn btn-primary" >Ready</button>
+                                    <button type="submit" class="btn btn-primary">Ready</button>
                                 </form>
                                 <% } else { %>
                                     <button type="button" class="btn btn-secondary" disabled>Ready</button>
@@ -218,7 +218,7 @@
                         </td>
                         <td>
                             <form action="/owner/orders/<%= order._id %>/edit" method="get">
-                            <button type="submit" class="btn btn-danger">edit</button>
+                                <button type="submit" class="btn btn-danger">edit</button>
                             </form>
                         </td>
                     </tr>

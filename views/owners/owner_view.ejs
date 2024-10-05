@@ -128,6 +128,7 @@ button.btn-danger:hover {
                 <th>Name</th>
                 <th>Email</th>
                 <th>Restaurant Name</th>
+                <th>Restaurant Address</th>
                 <th>Edit</th>
             </tr>
         </thead>
@@ -138,6 +139,7 @@ button.btn-danger:hover {
                         <td><%= owner.firstName %> <%= owner.lastName %></td>
                         <td><%= owner.email %></td>
                         <td><%= owner.restaurant_name %></td>
+                        <td><%= owner.restaurant_address.street %> <%= owner.restaurant_address.city %></td>
                         <td>
                             <form action="/owner/info/edit" method="get">
                                 <button type="submit" class="btn btn-danger">Edit</button>

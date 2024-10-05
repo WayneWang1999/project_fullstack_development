@@ -108,6 +108,8 @@
                     <th>LastName</th>
                     <th>Email</th>
                     <th>Password</th>
+                    <th>Restaurant Street</th>
+                    <th>Restaurant City</th>
                     <th>Restaurant Name</th>
                     <th>Action</th>
                 </tr>
@@ -131,10 +133,20 @@
 
                             <!-- Editable Password -->
                             <td>
-                                <input type="password" name="password" value="<%= owner.password %>" required>
+                                <input type="password" name="password"
+                                    placeholder="Enter new password (leave empty to keep current)">
                             </td>
 
                             <!-- Editable Restaurant Name -->
+                            <td>
+                                <input type="text" name="restaurant_address_street"
+                                    value="<%= owner.restaurant_address.street %>" required>
+                            </td>
+                            <td>
+                                <input type="text" name="restaurant_address_city"
+                                    value="<%= owner.restaurant_address.city %>" required>
+                            </td>
+
                             <td>
                                 <input type="text" name="restaurant_name" value="<%= owner.restaurant_name %>" required>
                             </td>

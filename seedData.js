@@ -258,7 +258,7 @@ const seedData = async () => {
                 password: hashedPassword,
                 restaurant_name: "Noodle Restaurant",
                 restaurant_menus: [menus[0]._id, menus[1]._id, menus[2]._id, menus[3]._id], // Use menu _id references
-                address: {
+                restaurant_address: {
                     street: '123 Main St',
                     city: 'Anytown',
                     state: 'CA',
