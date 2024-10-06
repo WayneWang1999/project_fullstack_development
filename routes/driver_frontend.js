@@ -12,7 +12,7 @@ const Owner = require('../models/owner');
 /*************************************************************************************************************** */
 //login and main page
 router.get('/', async (req, res) => {
-    res.render('customers/login');
+    res.render('drivers/login');
 });
 
 
