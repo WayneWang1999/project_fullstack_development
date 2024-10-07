@@ -15,6 +15,10 @@ router.get('/', async (req, res) => {
     res.render('drivers/login');
 });
 
+router.get('/driver/signUp', async (req, res) => {
+    res.render('/driver/signUp.ejs');
+});
+
 router.post('/login', async (req, res) => {
 
     const { email, password } = req.body;
@@ -34,12 +38,18 @@ router.post('/login', async (req, res) => {
 
 
         // Render the owner's dashboard to a layout with fetched data
-        return res.render('owners/layout', { orders });
+        return res.render('drivers/layout', { orders });
 
     } catch (err) {
         console.error(err);
         res.status(500).send('Server error');
     }
+});
+// to view orders
+router.get('/orders/:id/view', async (req, res) => {
+    const order = await Order.findById(req.params.id).populate('customer').populate('driver').populate('order_Menus.menu');
+
+    res.render('drivers/order_view.ejs', { order });
 });
 
 

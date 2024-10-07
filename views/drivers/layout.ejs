@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Management</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Button Styling */
+        a.btn,
+        button.btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        a.btn:hover,
+        button.btn:hover {
+            background-color: #0056b3;
+        }
+
+        button.btn-danger {
+            background-color: #dc3545;
+        }
+
+        button.btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        button.btn-secondary {
+            background-color: #6c757d;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+            text-transform: uppercase;
+            font-weight: normal;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        td {
+            color: #555;
+        }
+
+        /* Button inside Table */
+        td button {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            a.btn,
+            button.btn {
+                font-size: 14px;
+            }
+
+            td button {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+        }
+
+        #head_button {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            /* Ensures buttons are vertically centered */
+            width: 100%;
+            /* Optional: Can be adjusted based on container size */
+
+        }
+    </style>
+</head>
+
+<body>
+    <div id="head_button">
+        <a href="/driver/login" class="btn">Logout</a>
+    </div>
+    <h1>Orders Ready for Pick Up</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Customer Phone</th>
+                <th>Delivery Address</th>
+                <th>Order Time</th>
+                <th>Total Price</th>
+                <th>Order Status</th>
+                <th>Driver Name</th>
+                <th>Driver License</th>
+                <th>Delivered Image</th>
+                <th>View</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (orders && orders.length> 0) { %>
+                <% orders.forEach(order=> { %>
+                    <tr>
+                        <td>
+                            <%= order.customer.firstName %>
+                                <%= order.customer.lastName %>
+                        </td>
+                        <td>
+                            <%= order.customer.phone %>
+                        </td>
+                        <td>
+                            <%= `${order.delivery_Address.street}, ${order.delivery_Address.city},
+                                ${order.delivery_Address.state} ${order.delivery_Address.zipCode},
+                                ${order.delivery_Address.country}` %>
+                        </td>
+                        <td>
+                            <% const orderDate=new Date(order.orderDate); let finalFormattedDate; if
+                                (isNaN(orderDate.getTime())) { finalFormattedDate="Invalid Date" ; } else { const
+                                formattedTime=orderDate.toLocaleTimeString([], { hour: '2-digit' , minute: '2-digit' });
+                                const formattedDate=orderDate.toLocaleDateString(); finalFormattedDate=`${formattedTime}
+                                ${formattedDate}`; } %>
+                                <%= finalFormattedDate %>
+                        </td>
+                        <td>
+                            <%= order.totalPrice %>
+                        </td>
+                        <td>
+                            <%= order.orderStatus %>
+                        </td>
+                        <td>
+                            <%= order.driver?.firstName || 'Waiting driver...' %>
+                        </td>
+                        <td>
+                            <%= order.driver?.license || 'Driver license...' %>
+                        </td>
+                        <td>
+                            <%= order.delivered_image_url %>
+                        </td>
+                        <td>
+                            <% if (order.orderStatus==='Ready for Delivery' ) { %>
+                            <form action="/driver/orders/<%= order._id %>/view" method="get">
+                                <button type="submit" class="btn btn-danger">View</button>
+                            </form>
+                            <% } else { %>
+                                <button type="button" class="btn btn-secondary" disabled>View</button>
+                                <% } %>
+                        </td>
+                        
+                        
+                    </tr>
+                    <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="10">No Orders found</td>
+                            </tr>
+                            <% } %>
+        </tbody>
+    </table>
+</body>
+
+</html>
