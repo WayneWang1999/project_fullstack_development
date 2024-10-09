@@ -97,7 +97,6 @@ router.post('/orders', async (req, res) => {
         );
 
         const orderDate = new Date().toISOString();
-        // const formattedDate = currentDate.toISOString();
 
         const newOrder = new Order({
             customer: upsertCustomer._id,

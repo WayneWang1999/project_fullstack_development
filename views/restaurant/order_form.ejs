@@ -188,7 +188,7 @@
                 const totalPrice = document.createElement('input');
                 totalPrice.type = 'hidden';
                 totalPrice.name = 'totalPrice';
-                totalPrice.value = parseFloat(calcTotalPrice);
+                totalPrice.value = parseFloat(calcTotalPrice).toFixed(2);
                 e.target.appendChild(totalPrice);
             });
         });
