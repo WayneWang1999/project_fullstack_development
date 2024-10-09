@@ -52,7 +52,7 @@ router.post('/login', async (req, res) => {
 });
 // to view orders
 router.get('/orders/:id/view', async (req, res) => {
-    const order = await Order.findById(req.params.id).populate('customer').populate('driver').populate('delivered_image_url');
+    const order = await Order.findById(req.params.id).populate('customer').populate('driver').populate('delivered_image_url').populate('order_Menus.menu');
 
     res.render('drivers/order_view.ejs', { order });
 });
