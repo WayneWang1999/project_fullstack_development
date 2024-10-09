@@ -252,7 +252,7 @@ const seedData = async () => {
                 lastName: 'Wang',
                 email: 'admin@abc.com',
                 password: '111111',
-                restaurant_name: "Noodle Restaurant",
+                restaurant_name: "Mogouyan Hand-Pulled Noodles",
                 restaurant_menus: [menus[0]._id, menus[1]._id, menus[2]._id, menus[3]._id], // Use menu _id references
                 address: {
                     street: '123 Main St',
