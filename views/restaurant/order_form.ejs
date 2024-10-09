@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Info</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=home" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: whitesmoke;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 4px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        h3 {
+            margin: 20px 0px 10px 0px;
+        }
+
+        img {
+            width: 50px;
+            height: 50px;
+        }
+
+        form {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .flex-container {
+            display: flex;
+         
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        input, select {
+            padding: 4px;
+            margin: 4px 0;
+            border: 1px solid #ccc;
+            border-radius: 25px;
+        }
+
+        button {
+            background-color: rgb(231, 116, 8);
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 10px 20px;
+            font-size: 16px;
+            display: block;
+            margin: 20px auto;
+            border-radius: 25px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: brown;
+        }
+
+        #firstName, #lastName, #email, #street, #city, #state {
+            width: 200px;
+        }
+
+        #zipCode {
+            width: 100px;
+        }
+
+        label {
+            width: 100px;
+            display: inline-block;
+        }
+
+        h1 {
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        span {
+            padding: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="/restaurant" class="icon"><span class="material-symbols-outlined">home</span></a>
+    <h1>Order Info</h1>
+    <form action="/restaurant/orders" method="post" id="orderForm">
+        
+        <div class="flex-container">
+            
+            <div id="customer-info">
+                <h3>Customer Information</h3>
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="customerData[firstName]" required><br>
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="customerData[lastName]" required><br>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="customerData[email]" required><br>
+            </div>
+
+            <div id="delivery-info">
+                <h3>Delivery Address</h3>
+                <label for="street">Street</label>
+                <input type="text" id="street" name="delivery_Address[street]" required><br>
+                <label for="city">City</label>
+                <input type="text" id="city" name="delivery_Address[city]" required><br>
+                <label for="state">Province</label>
+                <input type="text" id="state" name="delivery_Address[state]" required><br>
+                <label for="zipCode">Postal Code</label>
+                <input type="text" id="zipCode" name="delivery_Address[zipCode]" required ><br>
+            </div>
+        </div>
+
+        <table id="menuTable">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Select Item</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% menuItems.forEach(item => { %>
+                    <tr>
+                        <td><img src="data:<%= item.image.contentType %>;base64,<%= item.image.data.toString('base64') %>" alt="<%= item.name %>"></td>
+                        <td><%= item.name %></td>
+                        <td><%= item.description %></td>
+                        <td>$<%= item.price %></td>
+                        <td>
+                            <input type="hidden" name="name[<%= item.id %>]" value="<%= item.name %>">
+                            <input type="hidden" name="price[<%= item.id %>]" value="<%= item.price %>">
+                            <input type="checkbox" class="menuCheckbox" value="<%= item.id %>"> 
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+
+        <button type="submit">Create Order</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('orderForm').addEventListener('submit', (e) => {
+                const checkboxes = Array.from(document.querySelectorAll('.menuCheckbox:checked'));
+                const selectedMenus = checkboxes.map(checkbox => {
+                    const menuId = checkbox.value;
+                    const quantityInput = 1;
+                    const nameInput = document.querySelector(`input[name="name[${menuId}]"]`);
+                    const priceInput = document.querySelector(`input[name="price[${menuId}]"]`);
+                    return {
+                        menu: menuId,
+                        quantity: quantityInput,
+                        price: priceInput ? parseFloat(priceInput.value) : 0,
+                        name: nameInput.value
+                    };
+                });
+
+                const calcTotalPrice = selectedMenus.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+                if (selectedMenus.length === 0) {
+                    e.preventDefault();
+                    alert('Please select at least one menu item.');
+                    return;
+                }
+
+                const selectedInput = document.createElement('input');
+                selectedInput.type = 'hidden';
+                selectedInput.name = 'order_Menus';
+                selectedInput.value = JSON.stringify(selectedMenus);
+                e.target.appendChild(selectedInput);
+
+                const totalPrice = document.createElement('input');
+                totalPrice.type = 'hidden';
+                totalPrice.name = 'totalPrice';
+                totalPrice.value = parseFloat(calcTotalPrice);
+                e.target.appendChild(totalPrice);
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Menu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-image: url('../images/pizza.jpg');
+            background-size: cover;
+            background-position: center;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .header {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 10px auto;
+            padding: 10px;
+            width: calc(50%);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            margin: 2px;
+        }
+
+        .logo {
+            max-width: 150px;
+            height: auto;
+        }
+
+        .menu-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .menu-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 10px;
+            padding: 10px;
+            width: calc(20% - 20px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .menu-item img {
+            height: 160px;
+            width: auto;
+            max-width: 100%;
+            border-radius: 8px 8px 0 0;
+            object-fit: cover;
+        }
+
+        .menu-item h2 {
+            font-size: 1.5em;
+            margin: 10px 0;
+        }
+
+        .menu-item p {
+            margin: 5px 0;
+        }
+
+
+#order-button {
+    display: inline-block;
+    margin: 60px 40px 20px 40px;
+    padding: 10px 20px;
+    background-color: rgb(231, 116, 8);
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 25px;
+    transition: background-color 0.3s;
+    font-size: 25px;
+}
+
+#order-button:hover {
+    background-color: brown;
+}
+
+
+.order-status {
+    margin-top: 30px;
+    padding: 4px;
+    width: calc(50%);
+    border: 1px solid brown;
+    border-radius: 8px;
+    background-color: rgb(85, 61, 61, 0.9);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center; 
+    margin: 0 auto;
+}
+.order-status label {
+    margin-right: 0px;
+}
+.order-status input {
+    margin-right: 10px;
+    padding: 0px;
+    width: 200px;
+    height: 22px;
+    text-align: center;
+    border-radius: 5px;
+}
+.order-status button {
+    border:none;
+    padding: 5px 10px;
+    min-width: 120px;
+    cursor: pointer;
+    background-color: rgb(17, 124, 17);
+    color: white;
+    border-radius: 25px;
+    transition: background-color 0.3s;
+    font-size: 16px;
+}
+.order-status button:hover {
+    background-color: rgb(21, 175, 16);
+}
+
+.order-status #orderStatusResult {
+    min-width: 200px;
+    margin-left: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 290px;
+    color:white;
+}
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <%- include("./partials/top.ejs", {restaurant_name:restaurant_name}) %>
+
+          <!-- Order Status Section -->
+          <div class="order-status">
+            <input type="text" id="confirmationNumber" placeholder="Confirmation number">
+            <button id="checkStatusBtn">Check Status</button></br>
+            <label id="orderStatusResult"></label>
+        </div>
+
+
+        <a id="order-button" href="restaurant/order">Order Now!</a>
+
+
+        <div class="menu-grid">
+            <% menuItems.forEach((item) => { %>
+                <div class="menu-item">
+                    <img src="data:<%= item.image.contentType %>;base64,<%= item.image.data %>" alt="<%= item.name %>">
+                    <h2><%= item.name %></h2>
+                    <p><%= item.description %></p>
+                    <p>Price: $<%= item.price.toFixed(2) %></p>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('checkStatusBtn').addEventListener('click', async () => {
+            const confirmationNumber = document.getElementById('confirmationNumber').value;
+    
+            if (confirmationNumber) {
+                try {
+                    const response = await fetch(`restaurant/orders/${confirmationNumber}/status`);
+                    const data = await response.json();
+    
+                    if (response.ok) {
+                        document.getElementById('orderStatusResult').innerText = `${data.orderStatus}`;
+                    } else {
+                        document.getElementById('orderStatusResult').innerText = data.message;
+                    }
+                } catch (error) {
+                    document.getElementById('orderStatusResult').innerText = 'Error retrieving order status';
+                }
+            } else {
+                document.getElementById('orderStatusResult').innerText = 'Please enter a confirmation number';
+            }
+        });
+    </script>
+</body>
+
+</html>
