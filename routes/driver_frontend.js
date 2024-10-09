@@ -51,6 +51,7 @@ router.get('/orders/:id/view', async (req, res) => {
 
     res.render('drivers/order_view.ejs', { order });
 });
+router.post('order/:id/update')
 
 
 module.exports = router;
