@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owner Management</title>
+    <title>Driver Management</title>
     <style>
         /* General Reset */
         * {
@@ -139,10 +139,9 @@
 
 <body>
     <div id="head_button">
-        <a href="/owner/menu" class="btn">Restaurant Menu</a>
-        <a href="/owner/logout" class="btn">Logout</a>
+        <a href="/driver/login" class="btn">Logout</a>
     </div>
-    <h1>Orders</h1>
+    <h1>Orders Ready for Pick Up</h1>
 
     <table>
         <thead>
@@ -157,7 +156,8 @@
                 <th>Driver License</th>
                 <th>Delivered Image</th>
                 <th>View</th>
-                <th>Action</th>
+                <th>Accept</th>
+                <th>Deliveried</th>
             </tr>
         </thead>
         <tbody>
@@ -197,7 +197,7 @@
                             <%= order.driver?.license || 'Driver license...' %>
                         </td>
                         <td>
-                            <% if (order.delivered_image_url&& order.delivered_image_url.img) { %>
+                            <% if (order.delivered_image_url ) { %>
                                 <img src="data:<%= order.delivered_image_url.img.contentType %>;base64,<%= order.delivered_image_url.img.data.toString('base64') %>"
                                     alt="<%= order.title %>" style="width: 100px; height: auto;"/>
                                 <% } else { %>
@@ -206,27 +206,38 @@
 
                         </td>
                         <td>
-                            <form action="/owner/orders/<%= order._id %>/view" method="get">
+                            <form action="/driver/orders/<%= order._id %>/view" method="get">
                                 <button type="submit" class="btn btn-danger">View</button>
                             </form>
                         </td>
                         <td>
-
-                            <% if (order.orderStatus==='New' ) { %>
-                                <form action="/owner/orders/<%= order._id %>/update" method="post">
-                                    <input type="hidden" name="orderStatus" value="Ready for Delivery">
-                                    <button type="submit" class="btn btn-primary">Ready</button>
+                            <% if (order.orderStatus==='Ready for Delivery' ) { %>
+                                <form action="/driver/orders/<%= order._id %>/update_accept" method="post">
+                                    <input type="hidden" name="orderStatus" value="In Transit">
+                                    <button type="submit" class="btn btn-danger">Accept</button>
                                 </form>
                                 <% } else { %>
-                                    <button type="button" class="btn btn-secondary" disabled>Ready</button>
+                                    <button type="button" class="btn btn-secondary" disabled>Accept</button>
                                     <% } %>
-
                         </td>
                         <td>
-                            <form action="/owner/orders/<%= order._id %>/edit" method="get">
-                                <button type="submit" class="btn btn-danger">edit</button>
-                            </form>
+                            <% if (order.orderStatus==='In Transit' ) { %>
+                                <form action="/driver/orders/<%= order._id %>/update_finish" method="post"
+                                    enctype="multipart/form-data">
+                                    <!-- File input for the image -->
+                                    <input type="file" id="orderimage" name="orderImage" accept="image/*" required>
+
+                                    <!-- Hidden field to pass the order status -->
+                                    <input type="hidden" name="orderStatus" value="Delivered">
+
+                                    <button type="submit" class="btn btn-danger">Delivered</button>
+                                </form>
+                                <% } else { %>
+                                    <button type="button" class="btn btn-secondary" disabled>Delivered</button>
+                                    <% } %>
                         </td>
+
+
                     </tr>
                     <% }); %>
                         <% } else { %>

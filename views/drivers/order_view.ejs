@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order View</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        strong {
+            font-weight: bold;
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            table {
+                font-size: 14px;
+            }
+
+            td {
+                font-size: 14px;
+                padding: 8px;
+            }
+        }
+
+        .container2 {
+            max-width: 800px;
+            margin: auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bolder;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Order Details</h1>
+
+        <!-- Customer Information -->
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">Customer Information</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Customer Name:</strong></td>
+                    <td><%= order.customer.firstName %> <%= order.customer.lastName %></td>
+                </tr>
+                <tr>
+                    <td><strong>Customer Phone:</strong></td>
+                    <td><%= order.customer.phone %></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Shipping Address -->
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">Delivery Address</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Street:</strong></td>
+                    <td><%= order.delivery_Address.street %></td>
+                </tr>
+                <tr>
+                    <td><strong>City:</strong></td>
+                    <td><%= order.delivery_Address.city %></td>
+                </tr>
+                <tr>
+                    <td><strong>State:</strong></td>
+                    <td><%= order.delivery_Address.state %></td>
+                </tr>
+                <tr>
+                    <td><strong>Zip Code:</strong></td>
+                    <td><%= order.delivery_Address.zipCode %></td>
+                </tr>
+                <tr>
+                    <td><strong>Country:</strong></td>
+                    <td><%= order.delivery_Address.country %></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Order Menus -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Menu Item</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% order.order_Menus.forEach(function(item) { %>
+                <tr>
+                    <td><%= item.menu.name %></td>
+                    <td><%= item.quantity %></td>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+
+        <!-- Order Status -->
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">Order Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Status:</strong></td>
+                    <td><%= order.orderStatus %></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Total Amount -->
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2">Total Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Total:</strong></td>
+                    <td>$<%= order.totalPrice.toFixed(2) %></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+<div class="container2">
+</div>
+
+</body>
+
+</html>

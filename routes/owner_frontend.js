@@ -1,6 +1,7 @@
 //This route is render a html to the views ejs .
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcrypt');
 
 //Import the models
 const Customer = require('../models/customer');
@@ -20,7 +21,7 @@ router.get('/', async (req, res) => {
 
     if (req.session.hasOwnProperty("loggedInUser") === true) {
         // If login is successful, fetch the data
-        const orders = await Order.find().populate('customer').populate('driver').populate('order_Menus.menu');
+        const orders = await Order.find().populate('customer').populate('driver').populate('delivered_image_url');
 
         // Render the owner's dashboard or a layout with fetched data
         return res.render('owners/layout', { orders });
@@ -38,7 +39,6 @@ router.get('/logout', async (req, res) => {
 });
 
 //user login check function
-//const bcrypt = require('bcrypt'); // Make sure bcrypt is required
 
 router.post('/login', async (req, res) => {
 
@@ -52,18 +52,17 @@ router.post('/login', async (req, res) => {
             // Return error if no user with the given email
             return res.status(400).render('owners/login', { error: 'Invalid email' });
         }
-
+        const isMatch = await bcrypt.compare(password, owner.password);
         // Compare the provided password with the stored hashed password
-        if (password !== owner.password) {  // Fixed from user.password to owner.password
+        if (!isMatch) {  // Fixed from user.password to owner.password
             return res.status(400).render('owners/login', { error: 'Invalid email or password' });
         }
-        //add userSession if need to use .
+        //If login is successful,add userSession keep the login untill logout .
         const userSession = { email, password };
         req.session.loggedInUser = userSession;
 
-
-        // If login is successful, fetch the data
-        const orders = await Order.find().populate('customer').populate('driver').populate('order_Menus.menu');
+        //  fetch the order data
+        const orders = await Order.find().populate('customer').populate('driver').populate('delivered_image_url');
 
 
         // Render the owner's dashboard to a layout with fetched data
@@ -76,26 +75,25 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/orders/:id/view', async (req, res) => {
-    const order = await Order.findById(req.params.id).populate('customer').populate('driver').populate('order_Menus.menu');
+    const order = await Order.findById(req.params.id).populate('customer').populate('driver').populate('delivered_image_url').populate('order_Menus.menu');
 
     res.render('owners/order_view.ejs', { order });
 });
+
+//This is for debug function. In the sumbit project don't use this point.
 router.get('/orders/:id/edit', async (req, res) => {
-    const order = await Order.findById(req.params.id).populate('customer').populate('driver');
+    const order = await Order.findById(req.params.id).populate('customer').populate('driver').populate('delivered_image_url');
 
     res.render('owners/order_edit.ejs', { order });
 });
 
 router.post('/orders/:id/update', async (req, res) => {
     try {
-        const orderId = req.params.id;
-        const { orderStatus } = req.body; // Get orderId and new orderStatus from the form
-
+        const { orderStatus } = req.body; // Get orderStatus from the form
         // Update the order's status in the database
-        await Order.findByIdAndUpdate(orderId, { orderStatus: orderStatus });
+        await Order.findByIdAndUpdate(req.params.id, { orderStatus: orderStatus });
         const orders = await Order.find().populate('customer').populate('driver').populate('order_Menus.menu');
-        //const menus = await Menu.find();
-        // Render the owner's dashboard or a layout with fetched data
+         // Render the owner's dashboard or a layout with fetched data
         res.render('owners/layout', { orders });
 
     } catch (err) {
@@ -105,6 +103,7 @@ router.post('/orders/:id/update', async (req, res) => {
 });
 
 router.get('/menu', async (req, res) => {
+    //nested reference owner->restaurant_menus->menu_image
     const owners = await Owner.find().populate({
         path: 'restaurant_menus',
         populate: { path: 'menu_images_url' }
@@ -117,19 +116,50 @@ router.get('/info/edit', async (req, res) => {
 });
 
 router.post('/info/update', async (req, res) => {
-    const { ownerId, firstName, lastName, email, password, restaurant_name } = req.body;
+    const { 
+        ownerId, 
+        firstName, 
+        lastName, 
+        email, 
+        password, 
+        restaurant_name, 
+        restaurant_address_street, 
+        restaurant_address_city 
+    } = req.body;
 
-    // Update the owner in the database
-    await Owner.findByIdAndUpdate(ownerId, {
+    // Prepare the update object
+    const updatedData = {
         firstName,
         lastName,
         email,
-        password, // Make sure to hash the password if necessary
         restaurant_name
-    });
+    };
 
-    // Redirect or respond after updating
-    res.redirect('/owner/menu'); // Change this to where you want to redirect
+    // Update address fields only if provided
+    if (restaurant_address_street) {
+        updatedData['restaurant_address.street'] = restaurant_address_street;
+    }
+
+    if (restaurant_address_city) {
+        updatedData['restaurant_address.city'] = restaurant_address_city;
+    }
+
+    // Only hash and update the password if provided
+    if (password && password.trim() !== "") {
+        const saltRounds = 5;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        updatedData.password = hashedPassword; // Only set if new password provided
+    }
+
+    try {
+        // Update the owner in the database
+        await Owner.findByIdAndUpdate(ownerId, { $set: updatedData });
+
+        res.redirect('/owner/menu');
+    } catch (err) {
+        console.error('Error updating owner:', err);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
 router.get('/menu/:id/edit', async (req, res) => {
@@ -157,7 +187,8 @@ router.post('/menu/update', upload.single('menuImage'), async (req, res) => {
             inStock: req.body.inStock === 'true'
         };
 
-        // If a new image is uploaded
+        // If a new image is uploaded,use the multer upload the image in the server.Middleware upload.single save a single
+        //file in the uploads/ folder. File information is stored in req.file
         if (req.file) {
             // Create a new Image document
             const newImage = new Image({

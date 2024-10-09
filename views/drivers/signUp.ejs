@@ -147,20 +147,16 @@
 </head>
 <body>
     
-    <div class="container">
-        <div class="box">
-            <h1>Login to the Driver's Webpage</h1>
-            <form method="POST" action="/driver/login">
-                <input type="text" placeholder="Enter email" name="email"/>
-                <input type="password" placeholder="Enter password" name="password"/>
-                <button>Login</button>
-            </form>   
-            </div>
-        
-
-        <div id="signUplink">
-            <a href="signUp">Click here to Sign Up</a>
-        </div>
+    <div class="box">
+        <h1>Signup for an Account</h1>
+        <form method="POST" action="/signup">
+            <input type="text" placeholder="Enter email" name="txtEmail"/>
+            <input type="password" placeholder="Enter password" name="txtPassword"/>
+            <input type="text" placeholder="Enter user type (driver, rider, admin)" name="txtUserType"/>
+            <button>Create Account</button>
+        </form>
+    </div>
+</div>
 
     </div>
         

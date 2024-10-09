@@ -116,7 +116,9 @@ button.btn-danger:hover {
 </head>
 
 <body>
-    <h1>Owners</h1>
+    <% owners.forEach(owner => { %>
+    <h1><%= owner.restaurant_name %></h1>
+    <%})%>
     <a href="/owner" class="back-btn">Back</a> <!-- Updated the class here -->
 
     <!-- Main Table for Owners -->
@@ -125,8 +127,8 @@ button.btn-danger:hover {
             <tr>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Password</th>
                 <th>Restaurant Name</th>
+                <th>Restaurant Address</th>
                 <th>Edit</th>
             </tr>
         </thead>
@@ -136,8 +138,8 @@ button.btn-danger:hover {
                     <tr>
                         <td><%= owner.firstName %> <%= owner.lastName %></td>
                         <td><%= owner.email %></td>
-                        <td><%= owner.password %></td>
                         <td><%= owner.restaurant_name %></td>
+                        <td><%= owner.restaurant_address.street %> <%= owner.restaurant_address.city %></td>
                         <td>
                             <form action="/owner/info/edit" method="get">
                                 <button type="submit" class="btn btn-danger">Edit</button>
