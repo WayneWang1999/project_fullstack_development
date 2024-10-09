@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
 
     if (req.session.hasOwnProperty("loggedInUser") === true) {
         // If login is successful, fetch the data
-        const orders = await Order.find().populate('customer').populate('driver').populate('order_Menus.menu');
+        const orders = await Order.find().populate('customer').populate('driver').populate('delivered_image_url');
 
         // Render the owner's dashboard or a layout with fetched data
         return res.render('owners/layout', { orders });
@@ -62,7 +62,7 @@ router.post('/login', async (req, res) => {
         req.session.loggedInUser = userSession;
 
         //  fetch the order data
-        const orders = await Order.find().populate('customer').populate('driver').populate('order_Menus.menu');
+        const orders = await Order.find().populate('customer').populate('driver').populate('delivered_image_url');
 
 
         // Render the owner's dashboard to a layout with fetched data
@@ -75,14 +75,14 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/orders/:id/view', async (req, res) => {
-    const order = await Order.findById(req.params.id).populate('customer').populate('driver').populate('order_Menus.menu');
+    const order = await Order.findById(req.params.id).populate('customer').populate('driver').populate('delivered_image_url');
 
     res.render('owners/order_view.ejs', { order });
 });
 
 //This is for debug function. In the sumbit project don't use this point.
 router.get('/orders/:id/edit', async (req, res) => {
-    const order = await Order.findById(req.params.id).populate('customer').populate('driver');
+    const order = await Order.findById(req.params.id).populate('customer').populate('driver').populate('delivered_image_url');
 
     res.render('owners/order_edit.ejs', { order });
 });

@@ -197,7 +197,13 @@
                             <%= order.driver?.license || 'Driver license...' %>
                         </td>
                         <td>
-                            <%= order.delivered_image_url %>
+                            <% if (order.delivered_image_url) { %>
+                                <img src="data:<%= order.delivered_image_url.img.contentType %>;base64,<%= order.delivered_image_url.img.data.toString('base64') %>"
+                                    alt="<%= order.title %>" style="width: 100px; height: auto;"/>
+                                <% } else { %>
+                                    <p>No image available</p>
+                                    <% } %>
+
                         </td>
                         <td>
                             <form action="/driver/orders/<%= order._id %>/view" method="get">

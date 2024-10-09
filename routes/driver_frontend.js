@@ -39,7 +39,7 @@ router.post('/login', async (req, res) => {
         const userSession = { email, password };
         req.session.loggedInUser = userSession;
         //  fetch the order data
-        const orders = await Order.find().populate('customer').populate('driver').populate('order_Menus.menu');
+        const orders = await Order.find().populate('customer').populate('driver').populate('delivered_image_url');
 
 
         // Render the owner's dashboard to a layout with fetched data
@@ -52,7 +52,7 @@ router.post('/login', async (req, res) => {
 });
 // to view orders
 router.get('/orders/:id/view', async (req, res) => {
-    const order = await Order.findById(req.params.id).populate('customer').populate('driver').populate('order_Menus.menu');
+    const order = await Order.findById(req.params.id).populate('customer').populate('driver').populate('delivered_image_url');
 
     res.render('drivers/order_view.ejs', { order });
 });
@@ -73,7 +73,7 @@ router.post('/orders/:id/update_accept', async (req, res) => {
                 driver: driver._id,
             }, { new: true, runValidators: true }
         );
-        const orders = await Order.find().populate('customer').populate('driver').populate('order_Menus.menu');
+        const orders = await Order.find().populate('customer').populate('driver').populate('delivered_image_url');
         // Render the owner's dashboard or a layout with fetched data
         res.render('drivers/layout', { orders });
 
@@ -104,34 +104,42 @@ const upload = multer({ storage: storage });
 router.post('/orders/:id/update_finish', upload.single('orderImage'), async (req, res) => {
     try {
         const { orderStatus } = req.body; // Get orderStatus from the form
-        // Update the order's status in the database
-        let imagePath = null;
-
+        
         // Check if an image file was uploaded
+        let imagePath = null;
+        let newImage = null;
+
         if (req.file) {
-            imagePath = req.file.path; // Path where the image is stored
+            // Create a new image instance
+            newImage = new Image({
+                name: req.file.filename, // The file name saved by multer
+                desc: 'Uploaded image',
+                img: {
+                    data: fs.readFileSync(req.file.path), // File path stored
+                    contentType: req.file.mimetype // Content type, e.g., image/png
+                }
+            });
+            // Save the new image to the database
+            await newImage.save();
         }
 
-        const newImage = new Image({
-            name: req.file.filename, // The file name saved by multer
-            desc: 'Uploaded image',
-            img: {
-                data: fs.readFileSync(req.file.path), // File path stored
-                contentType: req.file.mimetype // Content type, e.g., image/png
-            }
-        });
+        // Update the order's status in the database
+        await Order.findByIdAndUpdate(req.params.id, {
+            orderStatus: orderStatus,
+            delivered_image_url: newImage ? newImage._id : null // Reference the new image ID
+        }, { new: true, runValidators: true });
 
-        await Order.findByIdAndUpdate(req.params.id,            {
-                orderStatus: orderStatus,
-                delivered_image_url:newImage._id
-            }, { new: true, runValidators: true }
-        );
-        const orders = await Order.find().populate('customer').populate('driver').populate('order_Menus.menu');
+        // Fetch updated orders including populated fields
+        const orders = await Order.find()
+            .populate('customer')
+            .populate('driver')
+            .populate('delivered_image_url'); // Use the correct field name
+
         // Render the owner's dashboard or a layout with fetched data
         res.render('drivers/layout', { orders });
 
     } catch (err) {
-        console.error('Error updating order status:', err);
+        console.error('Error updating order status or uploading image:', err);
         res.status(500).send('Internal Server Error');
     }
 });
