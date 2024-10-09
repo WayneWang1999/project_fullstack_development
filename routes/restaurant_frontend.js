@@ -96,11 +96,15 @@ router.post('/orders', async (req, res) => {
             { new: true, upsert: true }
         );
 
+        const orderDate = new Date().toISOString();
+        // const formattedDate = currentDate.toISOString();
+
         const newOrder = new Order({
             customer: upsertCustomer._id,
             delivery_Address,
             order_Menus: JSON.parse(order_Menus), // Parse the string back to an array
             totalPrice,
+            orderDate: orderDate
         });
 
         await newOrder.save();
