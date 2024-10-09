@@ -8,6 +8,9 @@ const Driver = require('../models/driver');
 const Menu = require('../models/menu');
 const Order = require('../models/order');
 const Owner = require('../models/owner');
+const Image=require('../models/image')
+
+const fs = require('fs'); // Add this line to use the File System module
 
 /*************************************************************************************************************** */
 //login and main page
@@ -31,8 +34,10 @@ router.post('/login', async (req, res) => {
             // Return error if no user with the given email
             return res.status(400).render('drivers/login', { error: 'Invalid email' });
         }
-    ;
-
+        ;
+        //If login is successful,add userSession keep the login untill logout .
+        const userSession = { email, password };
+        req.session.loggedInUser = userSession;
         //  fetch the order data
         const orders = await Order.find().populate('customer').populate('driver').populate('order_Menus.menu');
 
@@ -52,5 +57,83 @@ router.get('/orders/:id/view', async (req, res) => {
     res.render('drivers/order_view.ejs', { order });
 });
 
+//****************************************************************************************************************** */
 
+router.post('/orders/:id/update_accept', async (req, res) => {
+    try {
+        const { orderStatus } = req.body; // Get orderStatus from the form
+        // Update the order's status in the database
+
+        const driver = await Driver.findOne({ email: req.session.loggedInUser.email });
+
+        await Order.findByIdAndUpdate(req.params.id,
+            {
+                orderStatus: orderStatus,
+                driver: driver._id,
+            }, { new: true, runValidators: true }
+        );
+        const orders = await Order.find().populate('customer').populate('driver').populate('order_Menus.menu');
+        // Render the owner's dashboard or a layout with fetched data
+        res.render('drivers/layout', { orders });
+
+    } catch (err) {
+        console.error('Error updating order status:', err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// for the upload file
+
+const multer = require('multer');
+
+// Configure storage settings for Multer
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // Directory where files will be stored
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname); // Unique filename
+  }
+});
+
+// Initialize the upload middleware
+const upload = multer({ storage: storage });
+
+
+router.post('/orders/:id/update_finish', upload.single('orderImage'), async (req, res) => {
+    try {
+        const { orderStatus } = req.body; // Get orderStatus from the form
+        // Update the order's status in the database
+        let imagePath = null;
+
+        // Check if an image file was uploaded
+        if (req.file) {
+            imagePath = req.file.path; // Path where the image is stored
+        }
+
+        const newImage = new Image({
+            name: req.file.filename, // The file name saved by multer
+            desc: 'Uploaded image',
+            img: {
+                data: fs.readFileSync(req.file.path), // File path stored
+                contentType: req.file.mimetype // Content type, e.g., image/png
+            }
+        });
+
+        await Order.findByIdAndUpdate(req.params.id,            {
+                orderStatus: orderStatus,
+                delivered_image_url:newImage._id
+            }, { new: true, runValidators: true }
+        );
+        const orders = await Order.find().populate('customer').populate('driver').populate('order_Menus.menu');
+        // Render the owner's dashboard or a layout with fetched data
+        res.render('drivers/layout', { orders });
+
+    } catch (err) {
+        console.error('Error updating order status:', err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+//************************************************************************************************************************* */
 module.exports = router;

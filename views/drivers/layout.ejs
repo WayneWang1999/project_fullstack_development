@@ -156,6 +156,8 @@
                 <th>Driver License</th>
                 <th>Delivered Image</th>
                 <th>View</th>
+                <th>Accept</th>
+                <th>Deliveried</th>
             </tr>
         </thead>
         <tbody>
@@ -198,16 +200,38 @@
                             <%= order.delivered_image_url %>
                         </td>
                         <td>
-                            <% if (order.orderStatus==='Ready for Delivery' ) { %>
                             <form action="/driver/orders/<%= order._id %>/view" method="get">
                                 <button type="submit" class="btn btn-danger">View</button>
                             </form>
-                            <% } else { %>
-                                <button type="button" class="btn btn-secondary" disabled>View</button>
-                                <% } %>
                         </td>
-                        
-                        
+                        <td>
+                            <% if (order.orderStatus==='Ready for Delivery' ) { %>
+                                <form action="/driver/orders/<%= order._id %>/update_accept" method="post">
+                                    <input type="hidden" name="orderStatus" value="In Transit">
+                                    <button type="submit" class="btn btn-danger">Accept</button>
+                                </form>
+                                <% } else { %>
+                                    <button type="button" class="btn btn-secondary" disabled>Accept</button>
+                                    <% } %>
+                        </td>
+                        <td>
+                            <% if (order.orderStatus==='In Transit' ) { %>
+                                <form action="/driver/orders/<%= order._id %>/update_finish" method="post"
+                                    enctype="multipart/form-data">
+                                    <!-- File input for the image -->
+                                    <input type="file" id="orderimage" name="orderImage" accept="image/*" required>
+
+                                    <!-- Hidden field to pass the order status -->
+                                    <input type="hidden" name="orderStatus" value="Delivered">
+
+                                    <button type="submit" class="btn btn-danger">Delivered</button>
+                                </form>
+                                <% } else { %>
+                                    <button type="button" class="btn btn-secondary" disabled>Delivered</button>
+                                    <% } %>
+                        </td>
+
+
                     </tr>
                     <% }); %>
                         <% } else { %>
