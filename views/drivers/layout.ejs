@@ -197,7 +197,7 @@
                             <%= order.driver?.license || 'Driver license...' %>
                         </td>
                         <td>
-                            <% if (order.delivered_image_url&& delivered_image_url.img) { %>
+                            <% if (order.delivered_image_url ) { %>
                                 <img src="data:<%= order.delivered_image_url.img.contentType %>;base64,<%= order.delivered_image_url.img.data.toString('base64') %>"
                                     alt="<%= order.title %>" style="width: 100px; height: auto;"/>
                                 <% } else { %>
