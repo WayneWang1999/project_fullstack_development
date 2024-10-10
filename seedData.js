@@ -179,13 +179,13 @@ const seedData = async () => {
             {
                 customer: customers[0]._id,  // Reference to the first customer
                 delivery_Address: {
-                    street: '123 Main St',
-                    city: 'Anytown',
-                    state: 'CA',
-                    zipCode: '12345',
-                    country: 'USA',
+                    street: '123 Queen St',
+                    city: 'Toronto',
+                    state: 'On',
+                    zipCode: 'M2H 5V5',
+                    country: 'Canada',
                 },
-                orderDate: new Date('2024-10-02'),
+                orderDate: new Date(),
                 order_Menus: [{
                     menu: menus[0]._id,
                     quantity: 1,
@@ -202,13 +202,13 @@ const seedData = async () => {
             {
                 customer: customers[1]._id,  // Reference to the second customer
                 delivery_Address: {
-                    street: '123 Main St',
-                    city: 'Anytown',
-                    state: 'CA',
-                    zipCode: '12345',
-                    country: 'USA',
+                    street: '12 King St',
+                    city: 'Toronto',
+                    state: 'ON',
+                    zipCode: 'M3H 2G1',
+                    country: 'Canada',
                 },
-                orderDate: new Date('2024-10-02'),
+                orderDate: new Date(),
                 order_Menus: {
                     menu: menus[0]._id,
                     quantity: 1,
@@ -223,7 +223,7 @@ const seedData = async () => {
         // Create driver data
         const drivers = await Driver.create([
             {
-                firstName: 'Driver_01',
+                firstName: 'Henrique',
                 lastName: 'Machitte',
                 email: 'driver01@abc.com',
                 password: '111111',
@@ -232,8 +232,8 @@ const seedData = async () => {
                 order: orders[0]._id, // Reference to first order
             },
             {
-                firstName: 'Driver_02',
-                lastName: 'Machitte',
+                firstName: 'Wayne',
+                lastName: 'Wang',
                 email: 'driver02@abc.com',
                 password: '111111',
                 phone: "6132176666",
