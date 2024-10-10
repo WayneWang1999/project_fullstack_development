@@ -174,7 +174,7 @@
                         <td>
                             <%= `${order.delivery_Address.street}, ${order.delivery_Address.city},
                                 ${order.delivery_Address.state} ${order.delivery_Address.zipCode},
-                                ${order.delivery_Address.country}` %>
+                               ` %>
                         </td>
                         <td>
                             <% const orderDate=new Date(order.orderDate); let finalFormattedDate; if
@@ -221,12 +221,7 @@
                                     <button type="button" class="btn btn-secondary" disabled>Ready</button>
                                     <% } %>
 
-                        </td>
-                        <td>
-                            <form action="/owner/orders/<%= order._id %>/edit" method="get">
-                                <button type="submit" class="btn btn-danger">edit</button>
-                            </form>
-                        </td>
+                        </td>  
                     </tr>
                     <% }); %>
                         <% } else { %>
