@@ -197,7 +197,7 @@ const seedData = async () => {
                 totalPrice: 23.3,
                 orderStatus: 'New',
                 driver: null, // Temporarily null
-                delivered_image_url: images[0]._id,
+                delivered_image_url: null,
             },
             {
                 customer: customers[1]._id,  // Reference to the second customer
@@ -216,7 +216,7 @@ const seedData = async () => {
                 totalPrice: 23.3,
                 orderStatus: 'New',
                 driver: null, // Temporarily null
-                delivered_image_url: images[0]._id,
+                delivered_image_url: null,
             },
         ]);
 
