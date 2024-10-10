@@ -40,11 +40,12 @@ router.get('/', async (req, res) => {
     // The Owners collection has only one document and can only be modified
     const owner = owners[0];
     const restaurant_name = owner.restaurant_name;
+    const restaurant_address = owner.restaurant_address;
 
     const menuItems = await getMenuItems();
 
     // Pass the menu items and the restaurant name to the main page
-    res.render('restaurant/index', {menuItems, restaurant_name});
+    res.render('restaurant/index', {menuItems, restaurant_name, restaurant_address});
 
 });
 

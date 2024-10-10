@@ -1,6 +1,7 @@
 <div class="header">
     <h1 class="restaurant-name"><%=restaurant_name%></h1>
-    <p class="location">16635 Yonge street</p>
-    <p class="location">Newmarket, ON</p>
+    
+    <p class="location"><%=restaurant_address.street%></p>
+    <p class="location"><%=restaurant_address.city%>, <%=restaurant_address.state%>  <%=restaurant_address.zipCode%></p>
     <p class="hours">Hours: 8:00 AM - 8:00 PM</p>
 </div>
