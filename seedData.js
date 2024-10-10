@@ -49,14 +49,14 @@ const seedData = async () => {
         //create image data
         const imgPath1 = path.join(__dirname, '\\public\\images\\fish.jpeg');
         const imgData1 = fs.readFileSync(imgPath1);
-        const imgPath2 = path.join(__dirname, '\\public\\images\\bread.jpeg');
+        const imgPath2 = path.join(__dirname, '\\public\\images\\noodles.jpeg');
         const imgData2 = fs.readFileSync(imgPath2);
         const imgPath3 = path.join(__dirname, '\\public\\images\\beef.jpeg');
         const imgData3 = fs.readFileSync(imgPath3);
         const imgPath4 = path.join(__dirname, '\\public\\images\\chicken.jpeg');
         const imgData4 = fs.readFileSync(imgPath4);
         const images = await Image.create({
-            name: 'fish',
+            name: 'Fish and Chips',
             desc: 'A sample image description',
             img: {
                 data: imgData1,
@@ -64,7 +64,7 @@ const seedData = async () => {
             }
         },
          {
-            name: 'bread',
+            name: 'Noodles',
             desc: 'A sample image description',
             img: {
                 data: imgData2,
@@ -72,7 +72,7 @@ const seedData = async () => {
             }
         },
         {
-            name: 'beef',
+            name: 'Steak and Fries',
             desc: 'A sample image description',
             img: {
                 data: imgData3,
@@ -95,26 +95,26 @@ const seedData = async () => {
         // Create menu data
         const menus = await Menu.create([
             {
-                name: 'Fish',
+                name: 'Fish and Chips',
                 sku: 'BDJ001',
-                description: 'Freshly caught fish',
-                price: 79.99,
+                description: 'Wayne Favorite food',
+                price: 19.99,
                 inStock: true,
                 menu_images_url: images[0]._id
             },
             {
-                name: 'Bread',
+                name: 'Gongfu Noodles',
                 sku: 'BDJ002',
-                description: 'Freshly baked bread',
-                price: 5.99,
+                description: 'Henrique Favorite food',
+                price: 15.99,
                 inStock: true,
                 menu_images_url: images[1]._id
             },
             {
-                name: 'Beef',
+                name: 'Steak and Fries',
                 sku: 'BDJ003',
-                description: 'High-quality beef',
-                price: 99.99,
+                description: 'Georges Favorite food',
+                price: 29.99,
                 inStock: true,
                 menu_images_url: images[2]._id
             },
@@ -122,7 +122,7 @@ const seedData = async () => {
                 name: 'Chicken',
                 sku: 'BDJ004',
                 description: 'Organic chicken',
-                price: 49.99,
+                price: 249.99,
                 inStock: true,
                 menu_images_url: images[3]._id
             },
@@ -256,14 +256,14 @@ const seedData = async () => {
                 lastName: 'Wang',
                 email: 'admin@abc.com',
                 password: hashedPassword,
-                restaurant_name: "Noodle Restaurant",
+                restaurant_name: "Mogouyan Hand-Pulled Noodles",
                 restaurant_menus: [menus[0]._id, menus[1]._id, menus[2]._id, menus[3]._id], // Use menu _id references
                 restaurant_address: {
-                    street: '123 Main St',
-                    city: 'Anytown',
-                    state: 'CA',
-                    zipCode: '12345',
-                    country: 'USA',
+                    street: '354 Queens St W',
+                    city: 'Toronto',
+                    state: 'ON',
+                    zipCode: 'M5V 2A2',
+                    country: 'Canada',
                 },
             },
         ]);
